@@ -14,12 +14,11 @@
 		<url>http://www.ploin-gmbh.de</url>
 	</organization>
 	<scm>
-		<developerConnection>scm:svn:https://guest:guest@ploinscm.de/svn/ploinMailFactory/trunk</developerConnection>
-		<url>https://ploinscm.de/svn/ploinMailFactory</url>
+		<url>https://github.com/reiz/ploinMailFactory</url>
 	</scm>
 	<issueManagement>
-		<system>SourceForge</system>
-		<url>https://sourceforge.net/tracker/?group_id=255902&amp;atid=1127252</url>
+		<system>GitHub</system>
+		<url>https://github.com/reiz/ploinMailFactory/issues</url>
 	</issueManagement>
 	<licenses>
 		<license>
