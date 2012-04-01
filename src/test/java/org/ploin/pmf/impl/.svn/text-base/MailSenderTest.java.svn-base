@@ -1,0 +1,140 @@
+package org.ploin.pmf.impl;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import org.junit.Before;
+import org.junit.Test;
+import org.ploin.pmf.IMailReader;
+import org.ploin.pmf.IMailSender;
+import org.ploin.pmf.IPropertiesLoader;
+import org.ploin.pmf.ISecondThreadSending;
+import org.ploin.pmf.MailFactoryException;
+import org.ploin.pmf.entity.MailConfig;
+import org.ploin.pmf.entity.SendingResult;
+import org.ploin.pmf.entity.ServerConfig;
+import org.ploin.pmf.entity.TemplateConfig;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Here are the testcases for the standardimplementation of the IMailSender interface.
+ * 
+ * $LastChangedBy$<br>
+ * $Revision$<br>
+ * $Date$<br>
+ */
+public class MailSenderTest {
+
+	private IMailSender mailSender;
+	private ISecondThreadSending secondThreadSending;
+
+
+	/**
+	 * Here we set up the testscenario
+	 */
+	@Before
+	public void init(){
+		IPropertiesLoader propertiesLoader = new PropertiesLoader();
+		propertiesLoader.setDirectory("businesslogic/mail");
+		propertiesLoader.setPropFile("mail.properties");
+		mailSender = new MailSender();
+		mailSender.setPropertiesLoader(propertiesLoader);
+		secondThreadSending = new SecondThreadSending(mailSender, propertiesLoader, null, null, null, null, null);
+	}
+
+
+	/**
+	 * In this testcase we test the getter and setter for the PropertiesLoader
+	 */
+	@Test
+	public void getterAndSetterForPropertiesLoader(){
+		mailSender.setPropertiesLoader(null);
+		assertNull(mailSender.getPropertiesLoader());
+		mailSender.setPropertiesLoader(new PropertiesLoader());
+		assertNotNull(mailSender.getPropertiesLoader());
+	}
+
+
+	/**
+	 * Here we test the sending with toEmail, ccEmail, bccEmail.
+	 * @throws MailFactoryException 
+	 */
+	@Test
+	public void sendMail() throws MailFactoryException{
+		IMailReader mailReader = new MailReader();
+		mailReader.setDirectory("businesslogic/mail");
+		String htmlMail = null;
+		MailConfig mailConfig = new MailConfig();
+		ServerConfig serverConfig = secondThreadSending.getServerConfig(null, "smtp.0.");
+		try {
+			mailConfig.addToRecipient("TIME Team", "time@ploin.de");
+			mailConfig.addCcRecipient("TIME Team", "time@ploin.de");
+			mailConfig.addBccRecipient("TIME Team", "time@ploin.de");
+			mailConfig.setSubject("TestMail");
+			TemplateConfig templateConfig = new TemplateConfig();
+			templateConfig.setName("testHtm");
+			htmlMail = mailReader.getHtmlMail(templateConfig);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		Map<String, String> map = new HashMap<String, String>();
+		SendingResult result = mailSender.sendMail("", htmlMail, mailConfig, serverConfig, map);
+		assertNotNull(result);
+	}
+
+	/**
+	 * Here we test the seinding with toEmail, ccEmail, bccEmail, but without names.
+	 * @throws MailFactoryException 
+	 */
+	@Test
+	public void sendMail2() throws MailFactoryException{
+		IMailReader mailReader = new MailReader();
+		mailReader.setDirectory("businesslogic/mail");
+		String htmlMail = null;
+		MailConfig mailConfig = new MailConfig();
+		ServerConfig serverConfig = secondThreadSending.getServerConfig(null, "smtp.0.");
+		try {
+			mailConfig.addToRecipient(null, "time@ploin.de");
+			mailConfig.addCcRecipient(null, "time@ploin.de");
+			mailConfig.addBccRecipient(null, "time@ploin.de");
+			mailConfig.setSubject("TestMail");
+			TemplateConfig templateConfig = new TemplateConfig();
+			templateConfig.setName("testHtm");
+			htmlMail = mailReader.getHtmlMail(templateConfig);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		Map<String, String> map = new HashMap<String, String>();
+		SendingResult result = mailSender.sendMail("", htmlMail, mailConfig, serverConfig, map);
+		assertNotNull(result);
+	}
+
+	/**
+	 * Here we test the seinding with toEmail map.
+	 * @throws MailFactoryException 
+	 */
+	@Test
+	public void sendMail3() throws MailFactoryException{
+		IMailReader mailReader = new MailReader();
+		mailReader.setDirectory("businesslogic/mail");
+		String htmlMail = null;
+		MailConfig mailConfig = new MailConfig();
+		ServerConfig serverConfig = secondThreadSending.getServerConfig(null, "smtp.0.");
+		try {
+			mailConfig.addToRecipient("hasteNetGesehen", "time@ploin.de");
+			mailConfig.addCcRecipient("hasteNetGesehen2", "time@ploin.de");
+			mailConfig.addBccRecipient(null, "reiz@ploin.de");
+			mailConfig.setSubject("TestMail");
+			TemplateConfig templateConfig = new TemplateConfig();
+			templateConfig.setName("testHtm");
+			htmlMail = mailReader.getHtmlMail(templateConfig);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		Map<String, String> map = new HashMap<String, String>();
+		SendingResult result = mailSender.sendMail(" TEST ", htmlMail, mailConfig, serverConfig, map);
+		assertNotNull(result);
+	}
+
+}

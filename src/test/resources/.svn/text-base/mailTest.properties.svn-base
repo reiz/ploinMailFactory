@@ -1,0 +1,16 @@
+
+
+htmlExtension=.html
+
+plainExtension=.txt
+
+singleThread=true
+
+
+just.in.root=JustRoot
+
+in.all.areas=root
+
+
+toEmailOverride=reiz@ploin.de
+toNameOverride=Rob Bob

@@ -1,0 +1,104 @@
+package org.ploin.pmf.entity;
+
+import java.io.Serializable;
+
+/**
+ * $LastChangedBy: r.reiz $<br>
+ * $Revision: 77 $<br>
+ * $Date: 2010-03-15 13:13:45 +0100 (Mon, 15 Mar 2010) $<br>
+ * <p/>
+ * Created by: robert
+ * Created date: Nov 15, 2009 - 7:04:03 PM
+ */
+public class ServerConfig implements Serializable {
+
+
+	private static final long serialVersionUID = -8726954900706958888L;
+	private String host;
+	private String fromEmail;
+	private String fromName;
+	private String authUser;
+	private String authPassword;
+	private String replyTo;
+	private int reTry = 0;
+	private long delay = 0; // delay time between the retrys in millisecond
+
+
+	public long getDelay() {
+		return delay;
+	}
+
+	public void setDelay(long delay) {
+		this.delay = delay;
+	}
+
+	public int getReTry() {
+		return reTry;
+	}
+
+	public void setReTry(int reTry) {
+		this.reTry = reTry;
+	}
+
+	public String getHost() {
+		return host;
+	}
+
+	public void setHost(String host) {
+		this.host = host;
+	}
+
+	public String getFromEmail() {
+		return fromEmail;
+	}
+
+	public void setFromEmail(String fromEmail) {
+		this.fromEmail = fromEmail;
+	}
+
+	public String getFromName() {
+		return fromName;
+	}
+
+	public void setFromName(String fromName) {
+		this.fromName = fromName;
+	}
+
+	public String getAuthUser() {
+		return authUser;
+	}
+
+	public void setAuthUser(String authUser) {
+		this.authUser = authUser;
+	}
+
+	public String getAuthPassword() {
+		return authPassword;
+	}
+
+	public void setAuthPassword(String authPassword) {
+		this.authPassword = authPassword;
+	}
+
+	public String getReplyTo() {
+		return replyTo;
+	}
+
+	public void setReplyTo(String replyTo) {
+		this.replyTo = replyTo;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Host      : " + host + "\n");
+		sb.append("FromEmail : " + fromEmail + "\n");
+		sb.append("FromName  : " + fromName + "\n");
+		sb.append("User      : " + authUser + "\n");
+		sb.append("Password  : " + authPassword + "\n");
+		sb.append("ReplyTo   : " + replyTo + "\n");
+		sb.append("Retry     : " + reTry + "\n");
+		sb.append("Delay     : " + delay + "\n");
+		return sb.toString();
+	}
+}

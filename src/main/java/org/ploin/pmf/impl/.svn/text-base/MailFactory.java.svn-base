@@ -1,0 +1,308 @@
+/**
+ * Copyright [2009] [PLOIN GmbH -> http://www.ploin-gmbh.de]
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
+package org.ploin.pmf.impl;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.ploin.pmf.*;
+import org.ploin.pmf.entity.MailConfig;
+import org.ploin.pmf.entity.Recipient;
+import org.ploin.pmf.entity.SendingResult;
+import org.ploin.pmf.entity.TemplateConfig;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
+/**
+ * Description: Implementation of the {@link IMailFactory} interface. This is
+ * the main class. This class control the MailReader, MailReplacer,<br/>
+ * MailSender and the PropertiesLoader.<br/>
+ * <p/>
+ * $LastChangedBy$<br>
+ * $Revision$<br>
+ * $Date$<br>
+ */
+public class MailFactory implements Serializable, IMailFactory {
+
+	private static final long serialVersionUID = -3910945449121995068L;
+	private static Log log = LogFactory.getLog(MailFactory.class);
+
+	private IMailReader mailReader = new MailReader();
+	private IMailReplacer mailReplacer = new MailReplacer();
+	private IMailSender mailSender = new MailSender();
+	private IPropertiesLoader propertiesLoader;
+
+	private boolean singleThread = true;
+	private boolean isInitialized = false;
+
+	private static final String KEY_PROPERTIES_FILENAME = "propFileName";
+	private static final String KEY_MAIL_DIRECTORY = "mailDirectory";
+	private static final String KEY_HTML_EXTENSION = "htmlExtension";
+	private static final String KEY_PLAIN_EXTENSTION = "plainExtension";
+	private static final String KEY_SINGLE_THREAD = "singleThread";
+
+	private static final String KEY_TO_EMAIL_OVERRIDE = "toEmailOverride";
+	private static final String KEY_CC_EMAIL_OVERRIDE = "toCcOverride";
+	private static final String KEY_BCC_EMAIL_OVERRIDE = "toBccOverride";
+
+	private static final String KEY_TO_NAME_OVERRIDE = "toNameOverride";
+
+	// *** Init Method ******
+
+	public void init() throws MailFactoryException {
+		if (isInitialized)
+			return;
+
+		if (propertiesLoader == null) 
+			propertiesLoader = new PropertiesLoader();
+
+		Properties properties = propertiesLoader.getPropertiesOnlyRoot(propertiesLoader.getPropFile());
+		String propertyFileName = properties.getProperty(KEY_PROPERTIES_FILENAME);
+		if (propertyFileName != null && !"".equals(propertyFileName)) 
+			propertiesLoader.setPropFile(propertyFileName);
+
+		String mailDirectory = properties.getProperty(KEY_MAIL_DIRECTORY);
+		setDirectory(mailDirectory);
+
+		setHtmlExtension(properties.getProperty(KEY_HTML_EXTENSION));
+
+		setPlainExtension(properties.getProperty(KEY_PLAIN_EXTENSTION));
+
+		String singleThread = properties.getProperty(KEY_SINGLE_THREAD);
+		if (singleThread != null) {
+			try {
+				this.singleThread = Boolean.parseBoolean(singleThread);
+			} catch (NumberFormatException e) {
+				this.singleThread = true;
+				log.error("Error trying to parse property singleThread ", e);
+			}
+		}
+		mailSender.setPropertiesLoader(propertiesLoader);
+		isInitialized = true;
+	}
+
+	// *** Implementation of IMailFactory ***
+
+	public SendingResult sendMail(MailConfig mailConfig, TemplateConfig templateConfig) throws MailFactoryException {
+		try {
+			init();
+
+			propertiesLoader.replaceVariables(templateConfig);
+			propertiesLoader.replaceVariables(templateConfig.getClient(), mailConfig);
+
+			String plainReplaced = null;
+			try {
+				String plain = getMailReader().getPlainMail(templateConfig);
+				plainReplaced = getMailReplacer().replace(plain, templateConfig.getMap());
+			} catch (MailFactoryException mfe) {
+				log.info("No plain text");
+			}
+
+			String htmlReplaced = null;
+			try {
+				String html = getMailReader().getHtmlMail(templateConfig);
+				htmlReplaced = getMailReplacer().replace(html, templateConfig.getMap());
+			} catch (MailFactoryException mfe) {
+				log.info("No html text");
+			}
+			return sendMailWithContent(mailConfig, templateConfig, plainReplaced, htmlReplaced);
+		} catch (Exception e) {
+			throw new MailFactoryException(e);
+		}
+	}
+
+	public SendingResult sendMailWithContent(MailConfig mailConfig, TemplateConfig templateConfig, String plainReplaced, String htmlReplaced) throws MailFactoryException {
+		try {
+			init();
+
+			Properties properties = propertiesLoader.getProperties(templateConfig.getClient(), propertiesLoader.getPropFile());
+			overwriteToRecipients (properties, mailConfig);
+			overwriteCcRecipients (properties, mailConfig);
+			overwriteBccRecipients(properties, mailConfig);
+
+			Map<String, String> map = null;
+			if (templateConfig != null)
+				map = templateConfig.getMap();
+
+			ISecondThreadSending secondThreadSending = new SecondThreadSending(mailSender, propertiesLoader, mailConfig, templateConfig, map, plainReplaced, htmlReplaced);
+
+			SendingResult result = null;
+
+			if (singleThread) {
+				result = secondThreadSending.send();
+			} else {
+				Thread secondThread = new Thread(secondThreadSending);
+				secondThread.start();
+				result = new SendingResult();
+				result.setResult("singleThread=false");
+			}
+			return result;
+		} catch (Exception e) {
+			throw new MailFactoryException(e);
+		}
+	}
+
+	public String getPlainMessage(TemplateConfig templateConfig) throws MailFactoryException {
+		try {
+			init();
+			propertiesLoader.replaceVariables(templateConfig);
+			String plain = getMailReader().getPlainMail(templateConfig);
+			String plainReplaced = getMailReplacer().replace(plain, templateConfig.getMap());
+			return plainReplaced;
+		} catch (Exception e) {
+			throw new MailFactoryException(e);
+		}
+	}
+
+	public String getHtmlMessage(TemplateConfig templateConfig) throws MailFactoryException{
+		try {
+			init();
+			propertiesLoader.replaceVariables(templateConfig);
+			String html = getMailReader().getHtmlMail(templateConfig);
+			String htmlReplaced = getMailReplacer().replace(html, templateConfig.getMap());
+			return htmlReplaced;
+		} catch (Exception e) {
+			throw new MailFactoryException(e);
+		}
+	}
+
+	// *** Getters / Setters ***
+
+	public IMailReader getMailReader() {
+		return mailReader;
+	}
+
+	public void setMailReader(IMailReader mailReader) {
+		this.mailReader = mailReader;
+	}
+
+	public IMailReplacer getMailReplacer() {
+		return mailReplacer;
+	}
+
+	public void setMailReplacer(IMailReplacer mailReplacer) {
+		this.mailReplacer = mailReplacer;
+	}
+
+	public IMailSender getMailSender() {
+		return mailSender;
+	}
+
+	public void setMailSender(IMailSender mailSender) {
+		this.mailSender = mailSender;
+	}
+
+	public IPropertiesLoader getPropertiesLoader() {
+		return propertiesLoader;
+	}
+
+	public void setPropertiesLoader(IPropertiesLoader propertiesLoader) {
+		this.propertiesLoader = propertiesLoader;
+		if (mailSender != null) {
+			mailSender.setPropertiesLoader(propertiesLoader);
+		}
+	}
+
+	// *** Delegate Methods ***
+
+	public String getDirectory() {
+		return (getPropertiesLoader() != null) ? getPropertiesLoader().getDirectory() : null;
+	}
+
+	public void setDirectory(String directory) {
+		if (getPropertiesLoader() != null) 
+			getPropertiesLoader().setDirectory(directory);
+
+		if (getMailReader() != null) 
+			getMailReader().setDirectory(directory);
+	}
+
+	public String getHtmlExtension() {
+		return (mailReader != null) ? mailReader.getHtmlExtension() : null;
+	}
+
+	public String getPlainExtension() {
+		return (mailReader != null) ? mailReader.getPlainExtension() : null;
+	}
+
+	public void setHtmlExtension(String extension) {
+		if (extension != null && mailReader != null) 
+			mailReader.setHtmlExtension(extension);
+	}
+
+	public void setPlainExtension(String extension) {
+		if (extension != null && mailReader != null) 
+			mailReader.setPlainExtension(extension);
+	}
+
+	public boolean isSingleThread() {
+		return singleThread;
+	}
+
+	public void setSingleThread(boolean singleThread) {
+		this.singleThread = singleThread;
+	}	
+
+	// *** Private Methods ***
+
+	private void overwriteToRecipients(Properties properties, MailConfig mailConfig) throws MailFactoryException{
+		List<Recipient> recipients = getOverwriteRecipients(properties, KEY_TO_EMAIL_OVERRIDE);
+		if (recipients != null)
+			mailConfig.setToRecipients(recipients);
+	}
+
+	private void overwriteCcRecipients(Properties properties, MailConfig mailConfig) throws MailFactoryException{
+		List<Recipient> recipients = getOverwriteRecipients(properties, KEY_CC_EMAIL_OVERRIDE);
+		if (recipients != null)
+			mailConfig.setCcRecipients(recipients);
+	}
+
+	private void overwriteBccRecipients(Properties properties, MailConfig mailConfig) throws MailFactoryException{
+		List<Recipient> recipients = getOverwriteRecipients(properties, KEY_BCC_EMAIL_OVERRIDE);
+		if (recipients != null)
+			mailConfig.setBccRecipients(recipients);
+	}
+
+	private List<Recipient> getOverwriteRecipients(Properties properties, String key) throws MailFactoryException {
+		String overrideValue = properties.getProperty(key);
+		if (overrideValue == null || "".equals(overrideValue.trim())) {
+			log.debug("No value found for key " + key);
+			return null;
+		}
+		
+		String toNameOverride = properties.getProperty(KEY_TO_NAME_OVERRIDE);
+
+		try {
+			List<Recipient> recipients = new ArrayList<Recipient>();
+			if (overrideValue.contains(";")){
+				String[] addresses = overrideValue.split(";");
+				for (String address: addresses){
+					recipients.add(new Recipient(toNameOverride, address));
+				}
+			} else {
+				recipients.add(new Recipient(toNameOverride, overrideValue));
+			}
+			return recipients;
+
+		} catch (Exception e) {
+			throw new MailFactoryException(e);
+		}
+	}
+}

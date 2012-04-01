@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/ploinMailFactory/!svn/ver/80/trunk/src/test/resources
+END
+template1.html
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/ploinMailFactory/!svn/ver/22/trunk/src/test/resources/template1.html
+END
+log4j.properties
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/ploinMailFactory/!svn/ver/8/trunk/src/test/resources/log4j.properties
+END
+template1.txt
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/ploinMailFactory/!svn/ver/22/trunk/src/test/resources/template1.txt
+END
+mailTest.properties
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/ploinMailFactory/!svn/ver/73/trunk/src/test/resources/mailTest.properties
+END
+mail.properties
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/ploinMailFactory/!svn/ver/63/trunk/src/test/resources/mail.properties
+END
+root.properties
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/ploinMailFactory/!svn/ver/24/trunk/src/test/resources/root.properties
+END

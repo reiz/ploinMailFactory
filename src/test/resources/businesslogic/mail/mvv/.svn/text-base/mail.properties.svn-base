@@ -1,0 +1,34 @@
+
+loadbalancing.nodes = smtp.0
+fallback.nodes      = smtp.0.fallback.0, smtp.0.fallback.1.
+
+smtp.0.host=ploin.de
+smtp.0.fromEmail=time@ploin.de
+smtp.0.fromName=PLOIN Time-Team
+smtp.0.authUser=time@ploin.de
+smtp.0.authPassword=tiMeeLocO01
+smtp.0.replyTo=time@ploin.de
+smtp.0.retry=1
+
+smtp.0.fallback.0.host=businesslogic.mail.gmx.net
+smtp.0.fallback.0.fromEmail=.stahlhammer@gmx.de
+smtp.0.fallback.0.fromName=Anton Stahlhammer
+smtp.0.fallback.0.authUser=
+smtp.0.fallback.0.authPassword=
+smtp.0.fallback.0.replyTo=reiz@ploin.de
+smtp.0.fallback.0.retry=
+
+smtp.0.fallback.1.host=businesslogic.mail.gmx.net
+smtp.0.fallback.1.fromEmail=.stahlhammer@gmx.de
+smtp.0.fallback.1.fromName= Stahlhammer
+smtp.0.fallback.1.authUser=
+smtp.0.fallback.1.authPassword=
+smtp.0.fallback.1.replyTo=reiz@ploin.de
+smtp.0.fallback.1.retry=
+
+
+just.in.mvv=MvvClient
+
+in.all.areas=client
+
+variable.in.client=mvv

@@ -1,0 +1,32 @@
+loadbalancing.nodes = smtp.0
+fallback.nodes      = smtp.0.fallback.0, smtp.0.fallback.1.
+
+smtp.0.host=
+smtp.0.fromEmail=
+smtp.0.fromName=
+smtp.0.authUser=
+smtp.0.authPassword=
+smtp.0.replyTo=
+smtp.0.retry=1
+
+smtp.0.fallback.0.host=mail.gmx.net
+smtp.0.fallback.0.fromEmail=anton.stahlhammer@gmx.de
+smtp.0.fallback.0.fromName=Anton Stahlhammer
+smtp.0.fallback.0.authUser=
+smtp.0.fallback.0.authPassword=
+smtp.0.fallback.0.replyTo=reiz@ploin.de
+smtp.0.fallback.0.retry=3
+
+smtp.0.fallback.1.host=mail.gmx.net
+smtp.0.fallback.1.fromEmail=anton.stahlhammer@gmx.de
+smtp.0.fallback.1.fromName=Anton Stahlhammer
+smtp.0.fallback.1.authUser=
+smtp.0.fallback.1.authPassword=
+smtp.0.fallback.1.replyTo=reiz@ploin.de
+smtp.0.fallback.1.retry=3
+
+just.in.directory=JustDirectory
+
+in.all.areas=directory
+
+variable.in.directory=dir

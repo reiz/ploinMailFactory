@@ -1,0 +1,99 @@
+<document>
+  <properties>
+    <author email="reiz@ploin.de">Robert Reiz</author>
+    <title>ploinFaces ReferenceGuide</title>
+  </properties>
+  <head>
+
+  </head>
+  <body>
+    <section name="Maven integration">
+        <p>
+            If you are using maven2 for your project management you
+            have just do two things to integrate ploinMailFactory. At first
+            your have to add the ploinMailFactory dependency to your pom.xml:
+        </p>
+        <source>
+&lt;dependency&gt;
+      &lt;groupId&gt;org.ploin.pmf&lt;/groupId&gt;
+      &lt;artifactId&gt;ploinMailFactory&lt;/artifactId&gt;
+      &lt;version&gt;1.3.1&lt;/version&gt;
+      &lt;scope&gt;compile&lt;/scope&gt;
+&lt;/dependency&gt;
+        </source>
+        <p>
+            And in step two you have to add the ploinMailFactory mirror to your
+            ~/.m2/settings.xml
+        </p>
+        <source>
+&lt;mirror&gt;
+  &lt;id&gt;ploinRep&lt;/id&gt;
+  &lt;name&gt;PLOIN Repository&lt;/name&gt;
+  &lt;url&gt;http://www.ploin-m2.de/nexus/content/groups/ploinRep/&lt;/url&gt;
+  &lt;mirrorOf&gt;ploinRep&lt;/mirrorOf&gt;
+&lt;/mirror&gt;
+        </source>
+        <subsection name="Example">
+            <p>your pom.xml could look like this:</p>
+            <source>
+&lt;project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  &lt;modelVersion>4.0.0&lt;/modelVersion&gt;
+  &lt;groupId>org.ploin.project&lt;/groupId&gt;
+  &lt;artifactId>project&lt;/artifactId&gt;
+  &lt;packaging>war&lt;/packaging&gt;
+  &lt;version>1.0-SNAPSHOT&lt;/version&gt;
+  &lt;name>project Maven Webapp&lt;/name&gt;
+  &lt;url>http://maven.apache.org&lt;/url&gt;
+
+  &lt;dependencies&gt;
+
+    &lt;dependency&gt;
+      &lt;groupId>junit&lt;/groupId&gt;
+      &lt;artifactId>junit&lt;/artifactId&gt;
+      &lt;version>3.8.1&lt;/version&gt;
+      &lt;scope>test&lt;/scope&gt;
+    &lt;/dependency&gt;
+
+    &lt;dependency&gt;
+      &lt;groupId>org.ploin.pmf&lt;/groupId&gt;
+      &lt;artifactId>ploinMailFactory&lt;/artifactId&gt;
+      &lt;version>1.3.1&lt;/version&gt;
+      &lt;scope>compile&lt;/scope&gt;
+    &lt;/dependency&gt;
+                
+  &lt;/dependencies&gt;
+                
+  &lt;build&gt;
+    &lt;finalName>project&lt;/finalName&gt;
+  &lt;/build&gt;
+&lt;/project&gt;
+            </source>
+            <p>And your ~/.m2/settings.xml could look like this:</p>
+            <source>
+&lt;?xml version="1.0"?&gt;
+&lt;settings&gt;
+  &lt;mirrors&gt;
+
+    &lt;mirror&gt;
+      &lt;id&gt;ibiblio.org&lt;/id&gt;
+      &lt;name&gt;ibiblio Mirror of http://repo1.maven.org/maven2/&lt;/name&gt;
+      &lt;url&gt;http://mirrors.ibiblio.org/pub/mirrors/maven2&lt;/url&gt;
+      &lt;mirrorOf>central&lt;/mirrorOf&gt;
+    &lt;/mirror&gt;
+
+    &lt;mirror&gt;
+      &lt;id&gt;ploinRep&lt;/id&gt;
+      &lt;name&gt;PLOIN Repository&lt;/name&gt;
+      &lt;url&gt;http://www.ploin-m2.de/nexus/content/groups/ploinRep/&lt;/url&gt;
+      &lt;mirrorOf&gt;ploinRep&lt;/mirrorOf&gt;
+    &lt;/mirror&gt;
+
+  &lt;/mirrors>
+&lt;/settings>
+
+            </source>
+        </subsection>
+    </section>
+  </body>
+</document>

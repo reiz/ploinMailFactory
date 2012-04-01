@@ -1,0 +1,27 @@
+package org.ploin.pmf.impl;
+
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
+import org.ploin.pmf.entity.Recipient;
+
+/**
+ * $LastChangedBy$<br>
+ * $Revision$<br>
+ * $Date$<br>
+ * <p/>
+ * Created by: robert
+ * Created date: Nov 18, 2009 - 8:37:44 PM
+ * <p/>
+ * Description:
+ */
+public class RecipientTest {
+
+	@Test
+	public void toString1(){
+		Recipient recipient = new Recipient();
+		recipient.setName("Robert Reiz");
+		recipient.setEmail("reiz@ploin.de");
+		assertEquals("<Robert Reiz>reiz@ploin.de", recipient.toString());
+	}
+
+}

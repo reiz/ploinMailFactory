@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="ploinMailFactory">
+
+	<skin>
+		<groupId>org.apache.maven.skins</groupId>
+		<artifactId>maven-default-skin</artifactId>
+		<version>1.0</version>
+	</skin>
+
+	<bannerLeft>
+		<name>ploinMailFactory</name>
+		<src>images/ploinMailFactory.png</src>
+		<href>http://www.ploin-gmbh.de/</href>
+	</bannerLeft>
+
+	<publishDate position="navigation-bottom" format="dd.MM.yyyy"/>
+	<body>
+		<links>
+			<item name="PLOIN GmbH" href="http://www.ploin-gmbh.de/" />
+		</links>
+		<menu name="ploinMailFactory">
+			<item name="Introduction" href="index.html"/>
+			<item name="Download" href="download.html"/>
+			<item name="Reference Guide" href="guide.html"/>
+			<item name="Presentation" href="presentation.html"/>
+			<item name="Support" href="support.html" />
+			<item name="Maven2 integration" href="mavenIntegration.html" />
+			<item name="Forum" href="https://sourceforge.net/projects/ploinmailfactor/forums/forum/928001" />
+			<item name="Tracker" href="https://sourceforge.net/tracker/?group_id=255902&amp;atid=1127252" />
+			<!--<item name="Release Notes" href="releasenotes.html" />-->
+		</menu>
+		<menu ref="reports"/>
+	</body>
+
+</project>

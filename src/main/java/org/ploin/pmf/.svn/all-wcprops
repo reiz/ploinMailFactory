@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/ploinMailFactory/!svn/ver/83/trunk/src/main/java/org/ploin/pmf
+END
+IMailFactory.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/ploinMailFactory/!svn/ver/77/trunk/src/main/java/org/ploin/pmf/IMailFactory.java
+END
+ISecondThreadSending.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/ploinMailFactory/!svn/ver/77/trunk/src/main/java/org/ploin/pmf/ISecondThreadSending.java
+END
+IMailReplacer.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/ploinMailFactory/!svn/ver/77/trunk/src/main/java/org/ploin/pmf/IMailReplacer.java
+END
+MailFactoryException.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/ploinMailFactory/!svn/ver/75/trunk/src/main/java/org/ploin/pmf/MailFactoryException.java
+END
+IPropertiesLoader.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/ploinMailFactory/!svn/ver/77/trunk/src/main/java/org/ploin/pmf/IPropertiesLoader.java
+END
+IMailSender.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/ploinMailFactory/!svn/ver/77/trunk/src/main/java/org/ploin/pmf/IMailSender.java
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/ploinMailFactory/!svn/ver/29/trunk/src/main/java/org/ploin/pmf/package.html
+END
+IMailReader.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/ploinMailFactory/!svn/ver/77/trunk/src/main/java/org/ploin/pmf/IMailReader.java
+END

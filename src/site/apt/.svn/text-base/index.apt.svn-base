@@ -1,0 +1,26 @@
+ploinMailFactory
+
+  The ploinMailFactory (in the past "javaMailFactory") is a mailing framework that provides extended
+  features like a templating mechanism, multitenancy and localizaion.
+  Internally it uses the commons-email API from Apache.
+
+
+* Features
+
+  * 83% code coverage with JUnit 4.4 and Clover2
+  
+  * Templating system for e-mails
+
+  * Multi-client capability
+
+  * Internationalization
+
+  * Load balancing for e-mail server
+
+  * Fall back server definition
+
+  * Retry function
+
+  * Defining delay time between the retrys
+
+  * Very small footprint, 29 kb.

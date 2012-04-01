@@ -1,0 +1,12 @@
+
+1. uebergabe von absoluten Pfaden zu templates
+
+3. einlesen von Templates aus DB.
+
+
+
+
+
+
+
+

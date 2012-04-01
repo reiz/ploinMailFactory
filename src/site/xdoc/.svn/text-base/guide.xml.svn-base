@@ -1,0 +1,504 @@
+
+<document>
+
+<properties>
+	<author email="jochen.schwarz@ploin.de">Jochen Schwarz</author>
+	<author email="reiz@ploin.de">Robert Reiz</author>
+	<title>ploinMailFactory Reference Guide</title>
+</properties>
+
+<head>
+</head>
+
+<body>
+
+<section name="Reference Guide">
+
+	<a href="#overview">Overview</a><br/>
+	<a href="#postofficepattern">PostOffice Pattern</a><br/>
+	<a href="#download">Download</a><br/>
+	<a href="#config">Framework-Configuration</a><br/>
+	<a href="#templating">Templating</a><br/>
+	<a href="#serverconfiguration">Server-Configuration</a><br/>
+	<a href="#sendingthemail">Sending the mail</a><br/>
+	<a href="#map">The map</a><br/>
+	<a href="#localization">Localization</a><br/>
+	<a href="#loadbalancing">Loadbalancing</a><br/>
+	<a href="#fallbackserver">Fallback, Retry and Delay</a><br/>
+	<a href="#testing">For testing</a><br/>
+	<a href="#logging">Logging</a><br/>
+	<br/>
+	<br/>
+
+	<a name="overview"></a><subsection name="Overview">
+		<p>
+			In order to send e-mails with Java, you use the Java Mail API. Although it is
+			working good, it is not really nice to use. Therefore
+			the commons-email.jar of Apache was developed as a wrapper for the Java Mail API -
+			and it really is much more fun using this than using the Sun's Java Mail API directly.
+			Still it introduces no new features (like templating, multitenancy or localization).
+		</p>
+		<p>
+			Imagine you want an application with e-mail support. In almost all applications there
+			is at least one e-mail template - either as plain text or in html format.
+			This template includes a text and some key words which are substituted for values from
+			the program when a e-mail is sent. Let's have a small example:
+		</p>
+		<source>
+#{address}
+
+We have reset your password.
+Your new password is: #{newPassword}
+
+With best regards,
+FooBar
+		</source>
+		<p>
+			In this template the expressions <i>#{address}</i> and <i>#{newPassword}</i> are substituted for the address 
+			of the person and a newly created password. The source code for reading this file and making the
+			substitutions is quite similar in every application. So templating is a good first
+			step and for sure a better way than assembling whole texts using a StringBuffer
+			directly in the source code (reminds me of the times when html code was assembled in Servlets...)
+		</p>
+		<p>
+			The second step is the multitenancy. Imagine the application is used by several departments (clients)
+			within a concern and each of these departments wants to have a personal text in the e-mail. Perhaps one
+			may even want html e-mails and another one plain text. A solution is having two templates (one for html
+			and one for plain text) which are allocated to the clients in the source code:
+		</p>
+		<source>
+if (user.getClient().equals("client1") ){
+    sendPasswordHtml();
+} else {
+    sendPasswordPlain();
+}
+		</source>
+		<p>
+			If the clients also want their e-mails localized, you need even more templates -
+			with 2 clients, each having both English and German e-mails, we have a total of 4
+			templates per e-mail. This can lead to a lot of complex if-else-statements which
+			are prone to errors.
+		</p>
+		<p>
+			As the requirements are quite similar in all applications, rather than writing the
+			same code again and again, this code can be outsourced into an framework
+			- and there we have the ploinMailFactory.
+		</p>
+		<p>
+ 			The ploinMailFactory uses the commons.email.jar of Apache and introduces the
+			following new features:
+			<ul>
+				<li>Templating system</li>
+				<li>Multitenancy</li>
+				<li>Localization</li>
+				<li>Consistent repository for e-mail templates</li>
+				<li>Improved support for special characters</li>
+				<li>Load balancing for e-mail server</li>
+				<li>Fall back server definition</li>
+				<li>Retry function</li>
+				<li>Defining delay time between the retrys</li>
+			</ul>
+			The framework is open source (released under the Apache 2.0 license at SourceForge).
+		</p>
+	</subsection>
+
+	<a name="postofficepattern"></a><subsection name="PostOffice Pattern">
+		<p>
+			Before we give detailed explanations on the usage, let us first have some words to the basic approach
+			used in the framework. Having the source code for sending e-mails being distributed all over an
+			application is confusing and leading to errors - therefore we strictly advocate having the
+			relevant portions of your source code concentrated at one point.
+		</p>
+		<p>
+			There are two situations which lead to varying realizations:
+		</p>
+		<p>
+			In some applications there is no connection with a database and instead persistence is realized by sending
+			e-mails to other systems. In such an application you can have an extra layer in your application which
+			handles the act of sending e-mails (each e-mail which can be sent by the application could be realized
+			with an extra class (like a DAO for an entity in a normal persistence layer).
+		</p>
+		<p>
+			In most applications, you have a persistence layer handling the storage and retrieval of data to/from a
+			database. Therefore, e-mails are only sent in a manageable number of cases. A good approach in such a
+			situation is using the PostOffice Design Pattern - this means having a single class (PostOffice) in
+			your business layer which is responsible for sending all e-mails. This class will have a method for
+			each mail of your application.
+		</p>
+		<p>
+			In the following example we have two e-mails: 
+		</p>
+		<ul>
+			<li>registrationMail</li>
+			<li>newPasswordMail</li>
+		</ul>
+		<p>
+			The PostOffice class could look like this:
+		</p>
+		<source>
+public class PostOffice implements IPostOffice {
+
+  public String sendRegistrationMail(String client, Locale locale, .. more params ..){
+     doSomething();
+     return "success";
+  }
+
+  public String sendNewPasswordMail(String client, Locale locale, .. more params ..){
+     doSomething();
+     return "success";
+  }
+}
+		</source>
+	</subsection>
+
+	<a name="download"></a><subsection name="Download">
+		<p>
+			You have to download the jar-files from SourceForge. In order to use the framework
+			in one of your applications, you have to add the <i>ploinMailFacotry.jar</i> and the
+			dependencies in the <i>lib</i> directory to the classpath of the application.
+		</p>
+		<a href="http://sourceforge.net/projects/ploinmailfactor/" target="_NEW">http://sourceforge.net/projects/ploinmailfactor/</a>
+	</subsection>
+
+	<a name="config"></a><subsection name="Framework-Configuration">
+		<p>
+			The ploinMailFactory expects a file "mail.properties" located in your root source-folder,
+			where your hibernate.properties and log4j.properties are placed, too. This is the central configuration
+			file for the ploinMailFacotry. 
+		</p>
+		<img src="images/mail.png" />
+		<p>
+			Here is an example file:
+		</p>
+		<source>
+propFileName=mail.properties
+
+mailDirectory=service/businesslogic/mail
+
+htmlExtension=.html
+
+plainExtension=.txt
+
+singleThread=false
+		</source>
+		<table>
+			<tr>
+				<td><b>propFileName</b></td>
+				<td>The name for further configuration files (overriding / extending the main configuration)</td>
+			</tr>
+			<tr>
+				<td><b>mailDirectory</b></td>
+				<td>The path to the directory (now called "mail directory"), where the e-mail templates are placed</td>
+			</tr>
+			<tr>
+				<td><b>htmlExtension</b></td>
+				<td>The extension for the html templates</td>
+			</tr>
+			<tr>
+				<td><b>plainExtension</b></td>
+				<td>The extension for the plain text templates</td>
+			</tr>
+			<tr>
+				<td><b>singleThread</b></td>
+				<td>
+					If this property is false, the e-mail sending process is happening in the
+					current thread. If this property is true, the ploinMailFactory will start
+					a new thread for sending the e-mail. This behavior is very useful if you
+					have multiple E-Mail-Server and long time-outs. 
+				</td>
+			</tr>
+		</table>
+	</subsection>
+	
+	<a name="templating"></a><subsection name="Templating">
+		<p>
+			The mail directory, where the e-mail templates are placed, should include a subdirectory 
+ 			for each client (now called "client directories") simply being named like the client. 
+			With 2 clients <i>client1</i> and <i>client2</i> we would have the following directory structure:
+		</p> 
+ 		<source>
+service/businesslogic/mail
+service/businesslogic/mail/client1
+service/businesslogic/mail/client2 
+ 		</source>
+ 		<p>
+ 			The ploinMailFactory framework searches for the right template using a simple mechanism.
+ 			First it looks for a template in the client directory.
+			If it can't find one, it looks in the mail directory.
+ 			Lastly, if it can't find one in the mail directory, too, it looks in the root classloader.
+ 		</p>
+ 		<p>
+ 			E-Mail templates equal for all clients should be placed in the main direcotry 
+ 			(service/businesslogic/mail). E-Mail templates specified for just one client should 
+ 			be placed in the client directory (service/businesslogic/mail/client1 or 
+ 			service/businesslogic/mail/client2). 
+ 		</p>
+ 		<p>
+ 			A template has to end with <i>.html</i> (html template) or <i>.txt</i> (plain text template). 
+ 			If there are templates with both endings, the framework sends a multipart e-mail with both html and
+			plain text. E-mail clients which cannot (or must not) show html e-mails, should show the plain text part.
+ 		</p>
+ 		<p>
+ 			Here is an example for a "InfoMail" equals for all clients. 
+ 		</p>
+		<source>
+:dear:
+
+you are out of budget.
+
+With best regards,
+FooBar
+		</source>
+ 		<img src="images/example1.png" />
+	</subsection>
+	<a name="serverconfiguration"></a><subsection name="Server-Configuration">
+		<p>
+			The e-mail server settings to be used for sending the mails is
+			set in a properties file "mail.properties" (the name may vary,
+			depending on the propFileName-parameter in the main "mail.properties"-file in the root), placed
+			in the the same direcotry there the mail tmeplate file.
+		</p>
+		<source>
+loadbalancing.nodes=server1
+
+server1.host=your.email.server
+server1.fromEmail=foo@bar.org
+server1.fromName=Foo Bar
+server1.authUser=foo
+server1.authPassword=bar
+server1.replyTo=fo@bar.org
+		</source>
+		<p>
+			Like the e-mail templates, the settings also support multiple clients using the
+			same mechanism. So if you need different settings for each client, put the
+			"mail.properties" in the client directories, whereas you can use a
+			single properties file in the main directory if you want to use the
+			same settings for all clients.
+		</p>
+	</subsection>
+	<a name="sendingthemail"></a><subsection name="Sending the mail">
+		<p>
+			The most important class of the framework is the <i>org.ploin.pmf.impl.MailFactory</i>.
+			Your PostOffice class should hold a reference to an instance of this class.
+			Best would be to realize both classes as Singletons or alternatively give them Singleton
+			scope with an IoC container like Spring:
+		</p>
+		<source>
+
+<font color="#0000aa">&lt;</font><font color="#0000ff">bean</font> <font color="red"> id</font>=<font color="green">"mailFactory"</font> <font color="red"> class</font>=<font color="green">"org.ploin.pmf.impl.MailFactory"</font> <font color="red"> init-method</font>=<font color="green">"init"</font> <font color="red"> /</font><font color="#0000aa">&gt;</font><br/>
+
+<font color="#0000aa">&lt;</font><font color="#0000ff">bean</font> <font color="red"> id</font>=<font color="green">"postOffice"</font> <font color="red"> class</font>=<font color="green">"org.company.project.java.service.businesslogic.impl.PostOffice"</font> <font color="red"></font><font color="#0000aa">&gt;</font><br/>
+<font color="white">---------</font><font color="#0000aa">&lt;</font><font color="#0000ff">property</font> <font color="red"> name</font>=<font color="green">"mailFactory"</font> <font color="red">  ref</font>=<font color="green">"mailFactory"</font> <font color="red">  /</font><font color="#0000aa">&gt;</font><br/>
+<font color="#0000aa">&lt;</font><font color="#0000ff">/bean</font><font color="#0000aa">&gt;</font>
+
+		</source>
+		<p>
+			Don't forget to call the init() method after the instanciation. 
+		</p>
+ 		<p>
+ 			For sending a template, the MailFactory class provides this method:
+ 		</p>
+ 		<source>
+public SendingResult sendMail(MailConfig mailConfig, TemplateConfig templateConfig);
+ 		</source>
+ 		<p>
+			The first parameter of the method is the MailConfig object, it contains the recievers and
+			the subject. The second parameter is the templateConfig object, it contains the client,
+			locale, the name of the email-template and a map for substitution.
+ 			A valid call would be.
+ 		</p>
+		<source>
+MailConfig mailConfig = new MailConfig();
+mailConfig.addToRecipient("John Doe", "john@doe.com");
+mailConfig.setSubject("InfoMail");
+
+TemplateConfig templateConfig = new TemplateConfig();
+templateConfig.setName("InfoMail");
+Map&lt;String, String&gt; map = new HashMap&lt;String, String&gt;();
+map.put(":dear:", "Dear John Doe");
+templateConfig.setMap(map);
+
+mailFactory.sendMail(mailConfig, templateConfig);
+		</source>
+		<p>
+			If a template is found (using the mechanism described above), template parameters 
+			will be replaced with the values from the map and the e-mail will be sent.
+		</p> 
+	</subsection>
+	
+	<a name="map"></a><subsection name="The map">
+		<p>
+			But that's not all. You can also access the values in the mail.properties using JSTL
+			style accessors in your Java code for both the values of your map as well as subject and recipients (to, cc, bcc)
+			in the mailConfig. Say all e-mails include a link to your application.
+ 			So you add the following line to the "mail.properties".
+		</p>
+		<source>
+mail.link=http://www.example.com
+		</source>
+		<p>
+			In your code you simply use the following line:
+		</p>
+		<source>
+map.put("link", "${mail.link}");
+		</source>
+		<p>
+			Your template could look like this:
+		</p>
+		<source>
+#{dear}
+
+you are out of budget.
+
+With best regards,
+FooBar
+#{link}
+		</source>
+		<p>
+			The framework starts looking for the property in the "mail.properties" in the client directory.
+ 			If this file does not exist or if it does not include the specified property, the framework looks
+ 			at the mail properties in the mail directory.
+		</p>
+	</subsection>
+	
+	<a name="localization"></a><subsection name="Localization">
+		<p>
+			Localized versions of your e-mails are realized similar to Java's concept of resource bundles.
+ 			You just have to add the locale to your e-mail templates like this:
+		</p>
+		<source>
+InfoMail_en.html
+InfoMail_de.html
+		</source>
+		<p>
+			To tell your code which template to use, you have to add the locale to the templateConfig object. 
+		</p>
+		<source>
+TemplateConfig templateConfig = new TemplateConfig();
+templateConfig.setLocale(new Locale("de", "DE"));
+		</source>
+		<p>
+			If the framework cannot find the template for the specified locale it 
+			uses the default (unlocalized) template.
+		</p>
+	</subsection>
+	
+	<a name="loadbalancing"></a><subsection name="Loadbalancing">
+		<p>
+			If you have two e-mail servers in your intranet, you can load-balance 
+			between them. You just have to add another smtp node. Here is an example configuration:
+		</p>
+		<source>
+loadbalancing.nodes=server1, server2
+
+server1.host=your.email.server0
+server1.fromEmail=foo@bar.org
+server1.fromName=Foo Bar
+server1.authUser=foo
+server1.authPassword=bar
+server1.replyTo=fo@bar.org
+
+server2.host=your.email.server1
+server2.fromEmail=foo@bar.org
+server2.fromName=Foo Bar
+server2.authUser=foo
+server2.authPassword=bar
+server2.replyTo=fo@bar.org
+		</source>
+		<p>
+			The ploinMailFactory will now use either the first or the second e-mail server 
+			for sending a e-mail. Both e-mail servers will be used. 
+		</p>
+	</subsection>
+	
+	<a name="fallbackserver"></a><subsection name="Fallback, Retry and Delay">
+		<p>
+			Sometimes, an e-mail server has crashed or is not available.
+			For this case you can define multiple fallback-servers. If the fallback-server fails too, you
+			can define retry times and the delay (in milliseconds) between the retrys. 
+		</p>
+		<source>
+loadbalancing.nodes=server1, server2
+fallback.nodes=fallback1, fallback2, fallback3
+
+server1.host=your.email.server0
+server1.fromEmail=foo@bar.org
+server1.fromName=Foo Bar
+server1.authUser=foo
+server1.authPassword=bar
+server1.replyTo=fo@bar.org
+
+server2.host=your.email.server1
+server2.fromEmail=foo@bar.org
+server2.fromName=Foo Bar
+server2.authUser=foo
+server2.authPassword=bar
+server2.replyTo=fo@bar.org
+
+fallback1.host=your.fallback.server1
+fallback1.fromEmail=foo@bar.org
+fallback1.fromName=Foo Bar
+fallback1.authUser=foo
+fallback1.authPassword=bar
+fallback1.replyTo=fo@bar.org
+fallback1.retry=3
+fallback1.delay=10000
+
+fallback2.host=your.fallback.server2
+fallback2.fromEmail=foo@bar.org
+fallback2.fromName=Foo Bar
+fallback2.authUser=foo
+fallback2.authPassword=bar
+fallback2.replyTo=foo@bar.org
+fallback2.retry=3
+fallback2.delay=10000
+
+fallback3.host=your.fallback.server3
+fallback3.fromEmail=foo@bar.org
+fallback3.fromName=Foo Bar
+fallback3.authUser=foo
+fallback3.authPassword=bar
+fallback3.replyTo=foo@bar.org
+fallback3.retry=3
+fallback3.delay=10000
+		</source>
+	</subsection>
+	
+	<a name="testing"></a><subsection name="For testing">
+		<p>
+			In a test-environment, it is often useful to send all email to a test-emailaccount. 
+			For this reason you can set the properties "toEmailOverride", "toCcOverride" and "toBccOverride"
+			in your "mail.properties" in the class root:
+		</p>
+		<source>
+toEmailOverride=test@mail.de
+toCcOverride=test@mail.de
+toBccOverride=test@mail.de
+		</source>
+		<p>
+			If this properties are set, the list of "toRecipients", "ccRecipients" and "bccRecipients" in the
+			mailConfig object will be replaced with the values from the properties file. 
+		</p>
+	</subsection>
+
+	<a name="logging"></a><subsection name="logging">
+		<p>
+			Internally the ploinMailFactory uses log4j for logging. You can set the log level to debug with
+			the following line in your log4j.properties.
+		</p>
+		<source>
+log4j.logger.org.ploin.pmf DEBUG
+		</source>
+		<p>
+			Or to ERROR with the following line:
+		</p>
+		<source>
+log4j.logger.org.ploin.pmf ERROR
+		</source>
+	</subsection>
+
+</section>
+
+</body>
+
+</document>

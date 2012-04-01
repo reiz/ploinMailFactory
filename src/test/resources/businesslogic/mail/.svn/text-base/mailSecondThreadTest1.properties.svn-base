@@ -1,0 +1,20 @@
+
+loadbalancing.nodes = server1, server2 
+fallback.nodes      = server1, server2 
+
+
+server1.host=mail.gmx.net
+server1.fromEmail=anton.stahlhammer@gmx.de
+server1.fromName=Anton Stahlhammer
+server1.authUser=
+server1.authPassword=
+server1.replyTo=reiz@ploin.de
+server1.retry=3
+
+server2.host=mail.gmx.net
+server2.fromEmail=anton.stahlhammer@gmx.de
+server2.fromName=Anton Stahlhammer
+server2.authUser=
+server2.authPassword=
+server2.replyTo=reiz@ploin.de
+server2.retry=3

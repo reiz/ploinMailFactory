@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/ploinMailFactory/!svn/ver/80/trunk/src/test/resources/businesslogic/mail
+END
+regTemplate_de.txt
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/ploinMailFactory/!svn/ver/11/trunk/src/test/resources/businesslogic/mail/regTemplate_de.txt
+END
+mail2.properties
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/ploinMailFactory/!svn/ver/73/trunk/src/test/resources/businesslogic/mail/mail2.properties
+END
+mail3.properties
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/ploinMailFactory/!svn/ver/73/trunk/src/test/resources/businesslogic/mail/mail3.properties
+END
+mailSecondThreadTest1.properties
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/ploinMailFactory/!svn/ver/62/trunk/src/test/resources/businesslogic/mail/mailSecondThreadTest1.properties
+END
+mailSecondThreadTest2.properties
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/ploinMailFactory/!svn/ver/62/trunk/src/test/resources/businesslogic/mail/mailSecondThreadTest2.properties
+END
+mailSecondThreadTest3.properties
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/ploinMailFactory/!svn/ver/73/trunk/src/test/resources/businesslogic/mail/mailSecondThreadTest3.properties
+END
+regTemplate_de.html
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/ploinMailFactory/!svn/ver/11/trunk/src/test/resources/businesslogic/mail/regTemplate_de.html
+END
+regTemplate.txt
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/ploinMailFactory/!svn/ver/11/trunk/src/test/resources/businesslogic/mail/regTemplate.txt
+END
+registrationMail.txt
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/ploinMailFactory/!svn/ver/76/trunk/src/test/resources/businesslogic/mail/registrationMail.txt
+END
+testHtm.html
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/ploinMailFactory/!svn/ver/24/trunk/src/test/resources/businesslogic/mail/testHtm.html
+END
+regTemplate.html
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/ploinMailFactory/!svn/ver/11/trunk/src/test/resources/businesslogic/mail/regTemplate.html
+END
+mailTest.properties
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/ploinMailFactory/!svn/ver/80/trunk/src/test/resources/businesslogic/mail/mailTest.properties
+END
+mail.properties
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/ploinMailFactory/!svn/ver/80/trunk/src/test/resources/businesslogic/mail/mail.properties
+END

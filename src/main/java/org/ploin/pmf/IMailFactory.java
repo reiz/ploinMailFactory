@@ -1,0 +1,192 @@
+/**
+ * Copyright [2009] [PLOIN GmbH -> http://www.ploin.de]
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
+package org.ploin.pmf;
+
+import org.ploin.pmf.entity.MailConfig;
+import org.ploin.pmf.entity.SendingResult;
+import org.ploin.pmf.entity.TemplateConfig;
+
+/**
+ * Description: This is the main class. This interface functions as facade for the MailReader, MailReplacer,<br/>
+ * MailSender and the PropertiesLoader.
+ * <p/>
+ * $LastChangedBy: r.reiz $<br>
+ * $Revision: 77 $<br>
+ * $Date: 2010-03-15 13:13:45 +0100 (Mon, 15 Mar 2010) $<br>
+ */
+public interface IMailFactory {
+
+	/**
+	 * Initialize the mail Factory
+	 */
+	void init() throws MailFactoryException;
+
+	/**
+	 * This is the main method.  
+	 *
+	 * @param mailConfig the object containing the recipients and the client
+	 * @param templateConfig containing client, locale, template-name and map. 
+	 * @return A SendingResult object containing the result from the commons-email-api
+	 *         and the MimeMessage
+	 */
+	SendingResult sendMail(MailConfig mailConfig, TemplateConfig templateConfig) throws MailFactoryException;
+
+	/**
+	 * This method sends an e-mail with the given plainReplaced content and htmlReplaced content.
+	 * A template is not necessary.<br/>
+	 *
+	 * @param mailConfig the mailConfig object
+ 	 * @param templateConfig containing client, locale, template-name and map.
+	 * @param plainReplaced the plain text content to be send in the email.
+	 * @param htmlReplaced the HTML content to be send in the email.
+	 * @return A SendingResult object containing the result from the commons-email-api
+	 *         and the MimeMessage 
+	 * @throws Exception
+	 */
+	SendingResult sendMailWithContent(MailConfig mailConfig, TemplateConfig templateConfig, String plainReplaced, String htmlReplaced) throws MailFactoryException;
+
+	/**
+	 * This method tries to find a plain-text template file with the given name in the templateConfig,
+	 * fills it with the values from the map and returns the filled template. 
+	 *
+	 * @param templateConfig containing client, locale, template-name and map.
+	 * @return filled template file, or null
+	 */
+	String getPlainMessage(TemplateConfig templateConfig) throws MailFactoryException;
+
+	/**
+	 * This method tries to find a HTML template file with the given name in the templateConfig,
+	 * fills it with the values from the map and returns the filled template.
+	 *
+	 * @param templateConfig containing client, locale, template-name and map.
+	 * @return filled template file, or null
+	 */
+	String getHtmlMessage(TemplateConfig templateConfig) throws MailFactoryException;
+
+	/**
+	 * Returns the IMailReader
+	 *
+	 * @return IMailReader
+	 */
+	IMailReader getMailReader();
+
+	/**
+	 * Set the IMailReader
+	 *
+	 * @param mailReader
+	 */
+	void setMailReader(IMailReader mailReader);
+
+	/**
+	 * Returns the IMailReplacer
+	 *
+	 * @return IMailReplacer
+	 */
+	IMailReplacer getMailReplacer();
+
+	/**
+	 * Set the IMailReplacer
+	 *
+	 * @param mailReplacer
+	 */
+	void setMailReplacer(IMailReplacer mailReplacer);
+
+	/**
+	 * Returns the IMailSender
+	 *
+	 * @return IMailSender
+	 */
+	IMailSender getMailSender();
+
+	/**
+	 * Set the IMailSender
+	 *
+	 * @param mailSender
+	 */
+	void setMailSender(IMailSender mailSender);
+
+	/**
+	 * Returns the IPropertiesLoader
+	 *
+	 * @return IPropertiesLoader
+	 */
+	IPropertiesLoader getPropertiesLoader();
+
+	/**
+	 * Set the IPropertiesLoader
+	 *
+	 * @param propertiesLoader
+	 */
+	void setPropertiesLoader(IPropertiesLoader propertiesLoader);
+	
+	/**
+	 * Returns the directory where the email-templates and the clients are in.
+	 * 
+	 * @return String, directroy
+	 */
+	String getDirectory();
+
+	/**
+	 * Set teh directory where the email-templates and the clients are in.
+	 * 
+	 * @param directory
+	 */
+	void setDirectory(String directory);
+	
+	/**
+	 * returns the html extension. 
+	 * 
+	 * @return String, htmlExtension
+	 */
+	String getHtmlExtension();
+
+	/**
+	 * Set the html extension. The standard is ".html"
+	 * 
+	 * @param htmlExtension
+	 */
+	void setHtmlExtension(String htmlExtension);
+	
+	/**
+	 * returns the plain extension. 
+	 * 
+	 * @return String, plainExtension
+	 */
+	String getPlainExtension();
+
+	/**
+	 * Set the plain extension. The standard is ".txt"
+	 * 
+	 * @param plainExtendsion
+	 */
+	void setPlainExtension(String plainExtendsion);
+
+	/**
+	 * returns the variable "singleThread"
+	 *
+	 * @return boolean
+	 */
+	boolean isSingleThread();
+
+	/**
+	 * Set the singleThread
+	 *
+	 * @param singleThread
+	 */
+	void setSingleThread(boolean singleThread);
+
+}

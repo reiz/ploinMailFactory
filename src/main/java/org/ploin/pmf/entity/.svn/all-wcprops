@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/ploinMailFactory/!svn/ver/77/trunk/src/main/java/org/ploin/pmf/entity
+END
+TemplateConfig.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/ploinMailFactory/!svn/ver/77/trunk/src/main/java/org/ploin/pmf/entity/TemplateConfig.java
+END
+Recipient.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/ploinMailFactory/!svn/ver/77/trunk/src/main/java/org/ploin/pmf/entity/Recipient.java
+END
+SendingResult.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/ploinMailFactory/!svn/ver/77/trunk/src/main/java/org/ploin/pmf/entity/SendingResult.java
+END
+MailConfig.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/ploinMailFactory/!svn/ver/77/trunk/src/main/java/org/ploin/pmf/entity/MailConfig.java
+END
+ServerConfig.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/ploinMailFactory/!svn/ver/77/trunk/src/main/java/org/ploin/pmf/entity/ServerConfig.java
+END

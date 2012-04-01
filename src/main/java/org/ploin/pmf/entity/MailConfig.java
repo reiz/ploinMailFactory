@@ -1,0 +1,118 @@
+package org.ploin.pmf.entity;
+
+import org.apache.commons.mail.EmailAttachment;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * $LastChangedBy: r.reiz $<br>
+ * $Revision: 77 $<br>
+ * $Date: 2010-03-15 13:13:45 +0100 (Mon, 15 Mar 2010) $<br>
+ * <p/>
+ * Created by: robert
+ * Created date: Nov 14, 2009 - 5:00:29 PM
+ */
+public class MailConfig implements Serializable {
+
+	private static final long serialVersionUID = 8536189084067843206L;
+	
+	private String subject;
+	private List<Recipient> toRecipients;
+	private List<Recipient> ccRecipients;
+	private List<Recipient> bccRecipients;
+	private List<EmailAttachment> attachements;
+
+	public String getSubject() {
+		return subject;
+	}
+
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+
+
+	public List<EmailAttachment> getAttachements() {
+		return attachements;
+	}
+
+	public void setAttachements(List<EmailAttachment> attachements) {
+		this.attachements = attachements;
+	}
+
+	public void addAttachement(EmailAttachment attachement){
+		if (isAttachementsEmpty()){
+			attachements = new ArrayList<EmailAttachment>();
+		}
+		attachements.add(attachement);
+	}
+
+	public boolean isAttachementsEmpty(){
+		return attachements == null || attachements.isEmpty();
+	}
+
+
+
+	public List<Recipient> getToRecipients() {
+		return toRecipients;
+	}
+
+	public void setToRecipients(List<Recipient> toRecipients) {
+		this.toRecipients = toRecipients;
+	}
+
+	public void addToRecipient(String name, String email){
+		if (isToRecipientEmpty()){
+			toRecipients = new ArrayList<Recipient>();
+		}
+		toRecipients.add(new Recipient(name, email));
+	}
+
+	public boolean isToRecipientEmpty(){
+		return toRecipients == null || toRecipients.isEmpty();
+	}
+
+
+
+	public List<Recipient> getCcRecipients() {
+		return ccRecipients;
+	}
+
+	public void setCcRecipients(List<Recipient> ccRecipients) {
+		this.ccRecipients = ccRecipients;
+	}
+
+	public boolean isCcRecipientEmpty(){
+		return ccRecipients == null || ccRecipients.isEmpty();
+	}
+
+	public void addCcRecipient(String name, String email){
+		if (isCcRecipientEmpty()){
+			ccRecipients = new ArrayList<Recipient>();
+		}
+		ccRecipients.add(new Recipient(name, email));
+	}
+
+
+
+	public List<Recipient> getBccRecipients() {
+		return bccRecipients;
+	}
+
+	public void setBccRecipients(List<Recipient> bccRecipients) {
+		this.bccRecipients = bccRecipients;
+	}
+
+	public boolean isBccRecipientEmpty(){
+		return bccRecipients == null || bccRecipients.isEmpty();
+	}
+
+	public void addBccRecipient(String name, String email){
+		if (isBccRecipientEmpty()){
+			bccRecipients = new ArrayList<Recipient>();
+		}
+		bccRecipients.add(new Recipient(name, email));
+	}
+
+}

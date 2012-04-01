@@ -1,0 +1,31 @@
+Release Notes
+
+  Here you find the release notes.
+
+* from 1.4 to 1.4.1
+
+ * BugFix for a NullPointerException
+
+* from 1.3.1 to 1.4
+
+ * Interfaces
+
+  * CR: Refactoring - many methods throw a checked "MailFactoryException" instead of returning null-values.
+  
+ * Default-Implementation
+
+  * CR: Implementation of the new methods with exceptions.
+  
+  * CR: MailFactory - the init() method doesn't have to be called explicitely anymore. If not called explicitely, it is also called from the methods automatically.
+  
+  * CR: MailReplacer - There are now two "kinds" of keys you can use:<br>
+   * Keys of the (old) form ":key" will trigger the replacement of all occurences of ":key" in the templateText. <br>
+   * Keys without starting ":" like "key" will trigger the replacement of all occurences of "#{key}" in the templateText.
+  
+  * BugFix: Variable-replacement with values from the properties-files now works again (for subject, emailadresses and names (for "to", "cc", "bcc"))  
+
+* from 1.3 to 1.3.1
+
+ * BugFix: MaiilSender.setServerProperties checks the authUser and authPassword for null values
+
+ * CR: The constructor of the MailFactory is empty. There is a new init() method in the MailFactory for better integration with the Spring Framework.

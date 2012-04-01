@@ -1,0 +1,64 @@
+package org.ploin.pmf.entity;
+
+import java.io.Serializable;
+
+/**
+ * $LastChangedBy$<br>
+ * $Revision$<br>
+ * $Date$<br>
+ * <p/>
+ * Created by: Robert Reiz
+ * Created date: Nov 14, 2009 - 5:02:38 PM
+ */
+public class Recipient implements Serializable {
+
+	private static final long serialVersionUID = -7144454439474200562L;
+	private String name;
+	private String email;
+
+	public Recipient(String name, String email){
+		if (email == null) throw new IllegalArgumentException("email is required");
+		this.name = name;
+		this.email = email;
+	}
+
+	public Recipient(){}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Recipient recipient = (Recipient) o;
+		if (email != null ? !email.equals(recipient.email) : recipient.email != null) return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		if (name == null && email == null) return "";
+		StringBuffer sb = new StringBuffer();
+		if (name != null){
+			sb.append("<");
+			sb.append(name);
+			sb.append(">");
+		}
+		if (email != null) sb.append(email);
+		return sb.toString();
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+}

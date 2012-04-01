@@ -1,0 +1,23 @@
+<html>
+	<head>
+		<title></title>
+	</head>
+
+	<body>
+
+	:designation:,<br />
+	<br />
+	wir haben Ihre Registrierung erhalten. Diese E-Mail dient zur
+	&Uuml;berpr&uuml;fung Ihrer E-Mail-Adresse. Um die Registrierung
+	abzuschlie&szlig;en, klicken Sie bitte auf den untenstehenden Link oder
+	kopieren Sie diesen in Ihren Browser.<br />
+	<br />
+	<a href=":reglink:">:reglink:</a><br />
+	<br />
+	<br />
+	Mit freundlichen Gr&uuml;&szlig;en,<br />
+	&nbsp;&nbsp;das PLOIN-Team<br />
+	<br />
+
+	</body>
+</html>

@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/ploinMailFactory/!svn/ver/80/trunk/src/test/java/org/ploin/pmf/impl
+END
+MailReplacerTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/ploinMailFactory/!svn/ver/80/trunk/src/test/java/org/ploin/pmf/impl/MailReplacerTest.java
+END
+RecipientTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/ploinMailFactory/!svn/ver/53/trunk/src/test/java/org/ploin/pmf/impl/RecipientTest.java
+END
+MailSenderTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/ploinMailFactory/!svn/ver/80/trunk/src/test/java/org/ploin/pmf/impl/MailSenderTest.java
+END
+PropertiesLoaderTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/ploinMailFactory/!svn/ver/80/trunk/src/test/java/org/ploin/pmf/impl/PropertiesLoaderTest.java
+END
+MailReaderTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/ploinMailFactory/!svn/ver/80/trunk/src/test/java/org/ploin/pmf/impl/MailReaderTest.java
+END
+MailConfigTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/ploinMailFactory/!svn/ver/53/trunk/src/test/java/org/ploin/pmf/impl/MailConfigTest.java
+END
+MailFactoryTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/ploinMailFactory/!svn/ver/80/trunk/src/test/java/org/ploin/pmf/impl/MailFactoryTest.java
+END
+SecondThreadSendingTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/ploinMailFactory/!svn/ver/80/trunk/src/test/java/org/ploin/pmf/impl/SecondThreadSendingTest.java
+END
